@@ -12,8 +12,8 @@ Existential Risk paper
 
 ## 3. Deliverables
 
-| # | Deliverable | Target Date | Notes |
-|---|-------------|-------------|-------|
+| # | Deliverable | Start Date | Target Date | Notes |
+|---|-------------|------------|-------------|-------|
 | D1 | [To be defined] | | |
 
 ## 4. Key Dates & Timeline

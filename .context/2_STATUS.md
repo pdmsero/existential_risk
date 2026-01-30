@@ -1,6 +1,6 @@
 # CURRENT STATE
 
-Last Updated: 2026-01-15
+Last Updated: 2026-01-25
 
 Active Phase: Unmapped
 
@@ -24,9 +24,9 @@ Due Soon:
 
 ## Deliverables
 
-| ID | State | Due | Description |
-|----|-------|-----|-------------|
-| D1 | Not Started | TBD | [To be defined] |
+| ID | State | Due | Description | Open Issues |
+|----|-------|-----|-------------|-------------|
+| D1 | Not Started | TBD | [To be defined] | 0 |
 
 ## Completed Deliverables
 - None
