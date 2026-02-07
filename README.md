@@ -52,3 +52,37 @@ Based on economic models comparing welfare under:
 - AI-driven growth scenarios
 - Various mortality improvement effects
 - Different social welfare calculations
+
+
+## Context (from 1_PLAN.md)
+<!-- from 1_PLAN: papers/existential_risk/.context/1_PLAN.md -->
+
+### 1. Goal
+
+Existential Risk paper
+
+### 2. Team
+
+* **Lead**: [To be defined]
+
+### 4. Key Dates & Timeline
+
+| Date | Event | Type |
+|------|-------|------|
+| | [To be defined] | |
+
+### 5. Logical Framework
+
+[To be defined]
+
+### 6. Methodology & Variables
+
+[To be defined]
+
+### 7. Anticipated Failure Points
+
+* [To be defined]
+
+### 8. Verification Strategy
+
+* [To be defined]
