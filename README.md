@@ -53,36 +53,7 @@ Based on economic models comparing welfare under:
 - Various mortality improvement effects
 - Different social welfare calculations
 
+## Notes
 
-## Context (from 1_PLAN.md)
-<!-- from 1_PLAN: papers/existential_risk/.context/1_PLAN.md -->
+Project state is tracked in `workspace.db` and dashboard views. Legacy `.context/` files were archived.
 
-### 1. Goal
-
-Existential Risk paper
-
-### 2. Team
-
-* **Lead**: [To be defined]
-
-### 4. Key Dates & Timeline
-
-| Date | Event | Type |
-|------|-------|------|
-| | [To be defined] | |
-
-### 5. Logical Framework
-
-[To be defined]
-
-### 6. Methodology & Variables
-
-[To be defined]
-
-### 7. Anticipated Failure Points
-
-* [To be defined]
-
-### 8. Verification Strategy
-
-* [To be defined]
