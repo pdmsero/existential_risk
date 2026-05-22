@@ -1,5 +1,6 @@
 {
-  "zotero_collection": "Existential Risk Literature",
-  "pdf_folder": "../references",
-  "description": "Literature sources for existential_risk"
+    "_drive_routing": "PDFs live in Google Drive (account determined by Projects/ subdirectory: work/ -> WORK, papers/personal/websites/ -> PERSONAL). pdf_folder below is a path INTO the Drive-for-desktop mount for the correct account, NOT a path inside this repo. Never copy PDFs into the repo. See ~/.claude/CLAUDE.md for the full rule.",
+    "zotero_collection": "Existential Risk Literature",
+    "pdf_folder": "/Users/pedro/Library/CloudStorage/GoogleDrive-pedro.serodio@gmail.com/My Drive/Research/Papers/Existential Risk/Sources",
+    "drive_url": "https://drive.google.com/drive/folders/1PoqLoGLXKBXw5-rtLjlyqdZvdnxrWb7i"
 }
