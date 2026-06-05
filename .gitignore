@@ -30,3 +30,28 @@ build/
 dist/
 .pytest_cache/
 .mypy_cache/
+
+# litpipe runtime
+literature/literature.db-shm
+literature/literature.db-wal
+literature/literature.db.bak
+literature/cache/
+literature/sources/
+literature/wiki/
+
+# LaTeX build
+paper/build/
+paper/main.pdf
+paper/*.aux
+paper/*.bbl
+paper/*.blg
+paper/*.fdb_latexmk
+paper/*.fls
+paper/*.log
+paper/*.out
+paper/*.synctex.gz
+paper/*.toc
+
+# Claude Code orphan worktrees
+.claude/worktrees/
+

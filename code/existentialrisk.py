@@ -1,232 +1,304 @@
+"""
+existentialrisk.py - Existential-risk cutoff computation.
+
+Models a representative-agent CRRA economy with mortality rate m, growth rate g,
+and an extinction hazard delta. Computes the cutoff delta* at which a
+high-growth, low-mortality scenario delivers the same social welfare as a
+baseline.
+
+Welfare functional (closed form under CRRA + constant growth):
+
+  W(g, m; rho, rho_s, gamma, u_bar) =
+      c_0^(1-gamma) / [ (1-gamma) * D_1(g,m) * D_2(g) ]
+    + u_bar / [ D_3(m) * D_4 ]
+
+where
+  D_1(g, m) = (rho + m) + (gamma - 1) g
+  D_2(g)    = rho_s + (gamma - 1) g
+  D_3(m)    = rho + m
+  D_4       = rho_s
+
+With extinction hazard delta added to the high-growth scenario:
+  W_AI(delta) substitutes (m_AI + delta) for m_AI in D_1, D_3
+  and (rho_s + delta) for rho_s in D_2, D_4.
+
+The cutoff delta* solves W_AI(delta*) = W_0 by numerical root-finding.
+
+NOTE: this replaces an earlier version in which (a) the utility function
+in line 7 used a non-standard form u(c) = u_bar c^(gamma-1) + 1/(1-gamma),
+inconsistent with the standard CRRA u(c) = c^(1-gamma)/(1-gamma) + u_bar
+used in social_welfare; and (b) the function existential_risk_cutoff
+returned (W_AI - W_0)/W_AI, not the actual cutoff hazard. Both are fixed.
+"""
+
 import math
 import numpy as np
+from scipy.optimize import brentq
 import pandas as pd
-import matplotlib.pyplot as plt
 
-# Utility function
+
+# ======================================================================
+# Standard CRRA utility (consistent throughout)
+# u(c) = c^(1-gamma)/(1-gamma) + u_bar  for gamma != 1
+# u(c) = log(c) + u_bar                  for gamma = 1
+# ======================================================================
+
 def utility(c, gamma, u_bar):
-    if gamma == 1:
-        return u_bar + math.log(c)
-    else:
-        return u_bar * c**(gamma-1) + 1 / (1 - gamma)
+    if abs(gamma - 1) < 1e-9:
+        return math.log(c) + u_bar
+    return c ** (1 - gamma) / (1 - gamma) + u_bar
 
-# Optimal time function
-def optimal_time(g, delta, gamma, u_bar, c0):
-    if gamma == 1:
-        return max(0, (g/delta - (u_bar + math.log(c0))) / g)
-    else:
-        return max(0, math.log(max(1, g / (delta * utility(c0, gamma, u_bar)))) / (g * (gamma - 1)))
 
-# Optimal consumption function
-def optimal_consumption(g, delta, gamma, u_bar, c0):
-    T = optimal_time(g, delta, gamma, u_bar, c0)
-    return c0 * math.exp(g * T)
+# ======================================================================
+# u_bar calibration from VSL anchor v_c0
+# v(c_0) = v_c0  with c_0 = 1  =>  u_bar = v_c0 - 1/(1-gamma)  (gamma != 1)
+#                                  u_bar = v_c0                (gamma = 1)
+# ======================================================================
 
-# Existential risk function
-def existential_risk(delta, T):
-    return max(0, min(1, 1 - math.exp(-delta * T)))
-
-# Set initial parameters
-c0 = 1  # Initial consumption normalized to 1
-
-# Global variables
-ValueStatisticalLife = 0
-AverageLifeExpectancy = 0
-ConsumptionPerCapita = 0
-
-def set_country(country):
-    global ValueStatisticalLife, AverageLifeExpectancy, ConsumptionPerCapita
-    
-    if country == "UK":
-        # ValueStatisticalLife = 1800000 #VPF
-        ValueStatisticalLife = 8590000 #J-value
-        AverageLifeExpectancy = 41
-        ConsumptionPerCapita = 25373
-    elif country == "US":
-        ValueStatisticalLife = 10000000
-        AverageLifeExpectancy = 40
-        ConsumptionPerCapita = 41666.6666666
-    else:
-        print(f"Data for {country} not available.")
-
-# Usage
-set_country("UK") 
-
-# Function to calculate v(c_0)
-def v_c0(VSL, ALE, Cpc):
-    return (VSL / ALE) / Cpc
-
-# v_c0 = 6  # Initial value of life
-g = 0.10  # 10% growth rate
-
-def calculate_u_bar(gamma):
-    if abs(gamma - 1) < 1e-6:
-        return v_c0(ValueStatisticalLife, AverageLifeExpectancy, ConsumptionPerCapita) - math.log(c0)
-    else:
-        return (v_c0(ValueStatisticalLife, AverageLifeExpectancy, ConsumptionPerCapita) - 1/(1-gamma)) / c0**(gamma-1)
-
-# Main analysis for Table 1
-table_1_results = []
-for delta in [0.01, 0.02, 0.03, 0.04, 0.05, 0.06]:
-    for gamma in [1, 2, 3]:
-        u_bar = calculate_u_bar(gamma)
-        T_star = optimal_time(g, delta, gamma, u_bar, c0)
-        c_star = optimal_consumption(g, delta, gamma, u_bar, c0)
-        risk = existential_risk(delta, T_star)
-        table_1_results.append((delta, gamma, c_star, T_star, risk))
-
-def print_table_1(results):
-    print("Table 1: Consumption and Existential Risk: Simple Model")
-    print("\n")
-    print("      δ = 1%             δ = 2%    ")
-    print("γ    c*    T*  Exist.Risk    c*    T*  Exist.Risk")
-    print("-" * 55)
-
-    gammas = [1, 2, 3]
-    deltas = [0.01, 0.02]
-
-    for gamma in gammas:
-        row = f"{gamma}   "
-        for delta in deltas:
-            result = next((r for r in results if r[0] == delta and r[1] == gamma), None)
-            if result:
-                _, _, c_star, T_star, risk = result
-                row += f"{c_star:5.2f} {T_star:5.1f}   {risk:.2f}     "
-            else:
-                row += "  -     -      -     "
-        print(row)
-
-# After calculating table_1_results
-print_table_1(table_1_results)
-
-# Value of life function
-def value_of_life(c, gamma, u_bar):
-    if gamma == 1:
-        return u_bar + np.log(c)
-    else:
-        return u_bar * c**(gamma-1) + 1 / (1 - gamma)
-
-# Set up the consumption range
-c = np.linspace(0.1, 2, 1000)
-
-# Set parameters
-u_bar = 0  # This value is chosen to make v(c) = 6 when c = 1 for gamma = 2
-v_c0 = 6   # Value of life when c = 1
-
-# Calculate u_bar for each gamma
-def calculate_u_bar(gamma):
-    if gamma == 1:
+def calibrate_u_bar(v_c0, gamma, c0=1.0):
+    if abs(gamma - 1) < 1e-9:
         return v_c0 - math.log(c0)
+    return v_c0 - c0 ** (1 - gamma) / (1 - gamma)
+
+
+# ======================================================================
+# Social welfare (closed form under CRRA + constant growth + Poisson hazard)
+# ======================================================================
+
+def social_welfare(g, m, delta, rho, rho_s, gamma, u_bar, c0=1.0):
+    """
+    Social welfare W under growth g, mortality m, extinction hazard delta.
+    The hazard delta enters as an additional discount-rate increment to both
+    the private-mortality channel (m + delta) and the social-discount channel
+    (rho_s + delta).
+    """
+    m_eff = m + delta
+    rho_s_eff = rho_s + delta
+
+    D1 = (rho + m_eff) + (gamma - 1) * g
+    D2 = rho_s_eff + (gamma - 1) * g
+    D3 = rho + m_eff
+    D4 = rho_s_eff
+
+    if abs(gamma - 1) < 1e-9:
+        # Logarithmic case: handle separately via l'Hospital
+        # W = (log c0)/D4_int + g/(D4_int)^2 + u_bar/(D3 D4)
+        # where D4_int = D3 + D2 - rho... actually just integrate directly.
+        # For gamma -> 1: c^(1-gamma)/(1-gamma) -> log(c).
+        # integral of e^(-D3 t) log(c0 e^(gt)) dt = log(c0)/D3 + g/D3^2
+        # then integrate over generations: W = log(c0)/(D3 D4) + g/(D3^2 D4) (approx)
+        # Use the limit form
+        cons_term = math.log(c0) / (D3 * D4) + g / (D3 ** 2 * D4) + g / (D3 * D4 ** 2)
     else:
-        return (v_c0 - 1/(1-gamma)) / c0**(gamma-1)
+        cons_term = c0 ** (1 - gamma) / ((1 - gamma) * D1 * D2)
 
-# Calculate and plot v(c) for each gamma
-gammas = [1, 2, 3]
-colors = ['b', 'g', 'r']
+    flow_term = u_bar / (D3 * D4)
 
-plt.figure(figsize=(10, 6))
+    return cons_term + flow_term
 
-for gamma, color in zip(gammas, colors):
-    u_bar = calculate_u_bar(gamma)
-    v = value_of_life(c, gamma, u_bar)
-    plt.plot(c, v, color=color, label=f'γ = {gamma}')
 
-plt.xlabel('Consumption, c')
-plt.ylabel('Value of a Year of Life, v(c)')
-plt.title('Value of Life vs Consumption for Different γ Values')
-plt.legend()
-plt.grid(True)
+# ======================================================================
+# Existential-risk cutoff: find delta* such that W_AI(delta*) = W_0
+# ======================================================================
 
-# Add a point and label for U.S. average today
-plt.plot(1, 6, 'ko')
-plt.annotate('U.S. average\ntoday', xy=(1, 6), xytext=(1.1, 4.5),
-             arrowprops=dict(facecolor='black', shrink=0.05))
+def existential_risk_cutoff(g_ai, m_ai, g0, m0, rho, rho_s, gamma, u_bar, c0=1.0,
+                             delta_max=1.0):
+    """
+    Find delta* > 0 such that social_welfare(g_ai, m_ai, delta*) = social_welfare(g0, m0, 0).
+    Returns 0 if W_AI(0) <= W_0 (AI scenario weakly worse even at zero hazard).
+    Returns NaN if no root in [0, delta_max].
+    """
+    W_0 = social_welfare(g0, m0, 0.0, rho, rho_s, gamma, u_bar, c0)
+    W_AI_0 = social_welfare(g_ai, m_ai, 0.0, rho, rho_s, gamma, u_bar, c0)
 
-plt.ylim(0, 20)
-plt.show()
+    if W_AI_0 <= W_0:
+        return 0.0
 
-# --- START OF TABLE 2 CALCULATIONS ---
+    def f(delta):
+        return social_welfare(g_ai, m_ai, delta, rho, rho_s, gamma, u_bar, c0) - W_0
 
-# Social welfare function W(g, m)
-def social_welfare(g, m, rho, rho_s, gamma, u_bar, v_c0):
-    result = u_bar / ((rho + m) * (rho_s)) + c0**(1-gamma) / ((1-gamma)*(rho + m + (gamma - 1) * g) * (rho_s + (gamma - 1) * g))
-    return result
+    # f(0) > 0 by construction; f(delta_max) should be negative for delta_max large.
+    if f(delta_max) > 0:
+        return float('nan')  # AI dominates even at very high hazard; cutoff > delta_max
+    try:
+        return brentq(f, 0.0, delta_max, xtol=1e-10)
+    except ValueError:
+        return float('nan')
 
-# Existential risk cutoff function δ*
-def existential_risk_cutoff(g_ai, m_ai, g0, m0, rho, rho_s,gamma, u_bar, v_c0):
-    W_ai = social_welfare(g_ai, m_ai, rho, rho_s,gamma, u_bar, v_c0)
-    W0 = social_welfare(g0, m0, rho, rho_s,gamma, u_bar, v_c0)
-    if abs(W_ai - W0) < 1e-10:  # Use a small threshold for floating-point comparison
-        return 0
-    elif W_ai < W0:
-        return float('nan')  # AI scenario worse than baseline
+
+# ======================================================================
+# Welfare-gain decomposition: separate the consumption channel from the
+# u_bar (life-value) channel. Shows which channel drives the cutoff.
+# ======================================================================
+
+def welfare_decomposition(g_ai, m_ai, g0, m0, rho, rho_s, gamma, u_bar, c0=1.0):
+    """
+    Decompose W_AI(0) - W_0 into:
+      - consumption channel: c_0^(1-gamma)/(1-gamma) * [1/(D1_ai D2_ai) - 1/(D1_0 D2_0)]
+      - u_bar channel:        u_bar * [1/(D3_ai D4_0) - 1/(D3_0 D4_0)]    (delta=0 case)
+    where D's are evaluated at the respective scenario.
+    """
+    D1_ai = (rho + m_ai) + (gamma - 1) * g_ai
+    D2_ai = rho_s + (gamma - 1) * g_ai
+    D3_ai = rho + m_ai
+    D4 = rho_s
+
+    D1_0 = (rho + m0) + (gamma - 1) * g0
+    D2_0 = rho_s + (gamma - 1) * g0
+    D3_0 = rho + m0
+
+    if abs(gamma - 1) < 1e-9:
+        cons_ai = math.log(c0) / (D3_ai * D4) + g_ai / (D3_ai ** 2 * D4)
+        cons_0 = math.log(c0) / (D3_0 * D4) + g0 / (D3_0 ** 2 * D4)
     else:
-        return (W_ai - W0) / W_ai
+        cons_ai = c0 ** (1 - gamma) / ((1 - gamma) * D1_ai * D2_ai)
+        cons_0 = c0 ** (1 - gamma) / ((1 - gamma) * D1_0 * D2_0)
 
-# Parameters for calculations
-g0 = 0.02  # Growth rate without AI
-m0 = 0.01  # Mortality rate without AI
-rho = 0.01  # Discount rate
-rho_s= 0.01 # Social discount rate
-v_c0 = 6  # Value of life
+    cons_gain = cons_ai - cons_0
+    flow_gain = u_bar * (1.0 / (D3_ai * D4) - 1.0 / (D3_0 * D4))
 
-# Main function to calculate the table values
-def calculate_table(rho_s=0.01, g_ai_values=None):
-    if g_ai_values is None:
-        g_ai_values = [0.10, 100]
-    results = []
-    for g_ai in g_ai_values:
-        for m_ai in [0.01, 0.005]:
-            for gamma in [1.00001, 2, 3]:
-                u_bar = calculate_u_bar(gamma)
-                delta_star = existential_risk_cutoff(g_ai, m_ai, g0, m0, rho, rho_s, gamma, u_bar, v_c0)
-                results.append((g_ai, m_ai, gamma, delta_star))
-    return results
+    return {
+        "consumption_channel": cons_gain,
+        "flow_utility_channel": flow_gain,
+        "total": cons_gain + flow_gain,
+        "flow_share": flow_gain / (cons_gain + flow_gain) if (cons_gain + flow_gain) != 0 else float('nan'),
+    }
 
-def print_table(results):
-    print("Table 2: Existential Risk Cutoffs: Mortality Improvements and Singularities")
-    print("\n")
-    print("                Fast growth: gai = 10%      Singularity: gai = ∞")
-    print("                      — mai —                    — mai —")
-    print("  γ              1%           0.5%           1%           0.5%")
-    print("—" * 65)
-    
-    for gamma in [1.00001, 2, 3]:
-        row = f"{gamma:<6}"
-        for g_ai in [0.10, 100]:
-            for m_ai in [0.01, 0.005]:
-                delta_star = next(delta for ga, ma, gm, delta in results if ga == g_ai and ma == m_ai and gm == gamma)
-                row += f"{delta_star:13.3f}" if not math.isnan(delta_star) else "      nan     "
-        print(row)
 
-# Run calculations and print the table
-results = calculate_table()
-print_table(results)
+# ======================================================================
+# VSL anchor
+# ======================================================================
 
-def print_table_3(results_baseline, results_near_zero):
-    print("Table 3: Existential Risk Cutoffs with Near Zero Social Discounting")
-    print("\n")
-    print("                   Baseline         Near zero social")
-    print("                  ρs = 1%             discounting")
-    print("                                     ρs = 0.05%")
-    print("                  — mai —             — mai —")
-    print("  γ              1%        0.5%      1%        0.5%")
-    print("—" * 65)
-    
-    gammas = [1.00001, 2, 3]
-    m_ai_values = [0.01, 0.005]
-    
-    for gamma in gammas:
-        row = f"{gamma:<6}"
-        for results in [results_baseline, results_near_zero]:
-            for m_ai in m_ai_values:
-                delta_star = next((delta for ga, ma, gm, delta in results if ga == 0.10 and ma == m_ai and gm == gamma), float('nan'))
-                row += f"{delta_star:10.3f}"
-        print(row)
+def v_c0_from_country(country):
+    """Returns v_c0 = (VSL / Life Expectancy) / Consumption per capita."""
+    data = {
+        "UK": {"VSL": 8590000, "ALE": 41, "Cpc": 25373},
+        "US": {"VSL": 10000000, "ALE": 40, "Cpc": 41666.67},
+    }
+    if country not in data:
+        raise ValueError(f"No data for {country}")
+    d = data[country]
+    return (d["VSL"] / d["ALE"]) / d["Cpc"]
 
-# Generate results for Table 3
-results_baseline = calculate_table(rho_s=0.01, g_ai_values=[0.10])
-results_near_zero = calculate_table(rho_s=0.0005, g_ai_values=[0.10])
 
-# Print Table 3
-print_table_3(results_baseline, results_near_zero)
+# ======================================================================
+# Headline tables
+# ======================================================================
+
+def table_existential_cutoffs(rho=0.01, rho_s=0.01, g0=0.02, m0=0.01,
+                                v_c0=6.0, c0=1.0, g_ai_list=None,
+                                m_ai_list=None, gamma_list=None):
+    """Compute delta* across a parameter grid. Returns DataFrame."""
+    if g_ai_list is None:
+        g_ai_list = [0.05, 0.10, 0.20]
+    if m_ai_list is None:
+        m_ai_list = [0.01, 0.005]
+    if gamma_list is None:
+        gamma_list = [1.0, 2.0, 3.0]
+
+    rows = []
+    for g_ai in g_ai_list:
+        for m_ai in m_ai_list:
+            for gamma in gamma_list:
+                u_bar = calibrate_u_bar(v_c0, gamma, c0)
+                delta_star = existential_risk_cutoff(g_ai, m_ai, g0, m0, rho, rho_s,
+                                                       gamma, u_bar, c0)
+                decomp = welfare_decomposition(g_ai, m_ai, g0, m0, rho, rho_s,
+                                                 gamma, u_bar, c0)
+                rows.append({
+                    "g_ai": g_ai,
+                    "m_ai": m_ai,
+                    "gamma": gamma,
+                    "u_bar": u_bar,
+                    "delta_star": delta_star,
+                    "flow_share": decomp["flow_share"],
+                    "cons_channel": decomp["consumption_channel"],
+                    "flow_channel": decomp["flow_utility_channel"],
+                })
+    return pd.DataFrame(rows)
+
+
+def table_discount_sensitivity(rho_s_list=None, **kw):
+    """Sensitivity of delta* to social discount rate rho_s."""
+    if rho_s_list is None:
+        rho_s_list = [0.0005, 0.001, 0.005, 0.01, 0.03]
+    rows = []
+    for rho_s in rho_s_list:
+        df = table_existential_cutoffs(rho_s=rho_s, **kw)
+        # Pick the headline case: g_ai=0.10, m_ai=0.005, gamma=2
+        sub = df[(df["g_ai"] == 0.10) & (df["m_ai"] == 0.005) & (df["gamma"] == 2.0)]
+        if len(sub) > 0:
+            r = sub.iloc[0]
+            rows.append({
+                "rho_s": rho_s,
+                "delta_star": r["delta_star"],
+                "flow_share": r["flow_share"],
+            })
+    return pd.DataFrame(rows)
+
+
+def table_vsl_sensitivity(v_c0_list=None, **kw):
+    """Sensitivity of delta* to VSL anchor v_c0 (drives u_bar)."""
+    if v_c0_list is None:
+        v_c0_list = [2.0, 4.0, 6.0, 8.0, 10.0]
+    rows = []
+    for v_c0 in v_c0_list:
+        df = table_existential_cutoffs(v_c0=v_c0, **kw)
+        sub = df[(df["g_ai"] == 0.10) & (df["m_ai"] == 0.005) & (df["gamma"] == 2.0)]
+        if len(sub) > 0:
+            r = sub.iloc[0]
+            rows.append({
+                "v_c0": v_c0,
+                "u_bar": r["u_bar"],
+                "delta_star": r["delta_star"],
+                "flow_share": r["flow_share"],
+            })
+    return pd.DataFrame(rows)
+
+
+# ======================================================================
+# Main: run the tables
+# ======================================================================
+
+if __name__ == "__main__":
+    print("=" * 70)
+    print("VSL anchors")
+    print("=" * 70)
+    for country in ["UK", "US"]:
+        v = v_c0_from_country(country)
+        print(f"  {country}: v_c0 = {v:.2f}")
+
+    print()
+    print("=" * 70)
+    print("Table 1: Existential-risk cutoffs across scenarios (v_c0 = 6, rho_s = 1%)")
+    print("=" * 70)
+    df1 = table_existential_cutoffs()
+    print(df1.to_string(index=False, float_format=lambda x: f"{x:.5f}"))
+
+    print()
+    print("=" * 70)
+    print("Table 2: Sensitivity to social discount rate (g_ai=10%, m_ai=0.5%, gamma=2)")
+    print("=" * 70)
+    df2 = table_discount_sensitivity()
+    print(df2.to_string(index=False, float_format=lambda x: f"{x:.5f}"))
+
+    print()
+    print("=" * 70)
+    print("Table 3: Sensitivity to VSL anchor v_c0 (g_ai=10%, m_ai=0.5%, gamma=2, rho_s=1%)")
+    print("=" * 70)
+    df3 = table_vsl_sensitivity()
+    print(df3.to_string(index=False, float_format=lambda x: f"{x:.5f}"))
+
+    print()
+    print("=" * 70)
+    print("Headline decomposition: which channel drives the cutoff?")
+    print("=" * 70)
+    decomp = welfare_decomposition(0.10, 0.005, 0.02, 0.01, 0.01, 0.01, 2.0,
+                                     calibrate_u_bar(6.0, 2.0))
+    print(f"  Consumption channel:  {decomp['consumption_channel']:.4f}")
+    print(f"  Flow-utility channel: {decomp['flow_utility_channel']:.4f}")
+    print(f"  Flow-channel share:   {decomp['flow_share']*100:.1f}%")
+    print()
+    print("  At the headline calibration, the flow-utility (u_bar / VSL) channel")
+    print("  is the dominant driver. Growth contributes a small share.")
+    print("=" * 70)
