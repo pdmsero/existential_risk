@@ -39,8 +39,10 @@ literature/cache/
 literature/sources/
 literature/wiki/
 
-# LaTeX build
-paper/build/
+# LaTeX build: track only the compiled PDF, ignore aux churn
+!paper/build/
+paper/build/*
+!paper/build/main.pdf
 paper/main.pdf
 paper/*.aux
 paper/*.bbl
