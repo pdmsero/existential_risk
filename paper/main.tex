@@ -40,7 +40,7 @@ mortality reduction \sep transformative AI
 \section{Introduction}
 \label{sec:intro}
 
-The economics of existential risk asks how to value the avoidance of low-probability, high-magnitude extinction outcomes within a welfare-economic framework. \citet{aschenbrenner2020existential} and \citet{trammell2020existential} provide the foundational analyses; \citet{jones2024recipe} extends the framework to growth-risk complementarities; the broader cost-benefit-of-catastrophic-risk tradition is summarised by \citet{posner2004catastrophe} and \citet{nordhaus2011economics}. The central methodological question is how the various channels (growth gains, mortality reduction, extinction probability, social discounting) combine to determine a policy-relevant threshold.
+The economics of existential risk asks how to value the avoidance of low-probability, high-magnitude extinction outcomes within a welfare-economic framework. \citet{aschenbrenner2020existential} and \citet{trammell2020existential} provide the foundational analyses; \citet{jones2024aidilemma} extends the framework to growth-risk complementarities; the broader cost-benefit-of-catastrophic-risk tradition is summarised by \citet{posner2004catastrophe} and \citet{nordhaus2011economics}. The central methodological question is how the various channels (growth gains, mortality reduction, extinction probability, social discounting) combine to determine a policy-relevant threshold.
 
 This paper provides a structured cost-benefit calculation of the threshold and asks a sharper question of it: \emph{which channel does the work}? Under what circumstances is the cutoff $\delta^*$ at which a transformative-technology scenario equals the status-quo baseline in welfare driven by faster growth, and under what circumstances is it driven by mortality reduction, or by social discounting choices? The structural decomposition delivers a clean answer that is at odds with the intuitive "growth versus extinction" framing.
 
@@ -54,7 +54,7 @@ The model is a standard representative-agent CRRA economy with individual mortal
 
 \emph{(iii) The cutoff is structural in $\rho_s$, not in $v_{c_0}$.} A tenfold reduction in $\rho_s$ (from $1\%$ to $0.1\%$) reduces $\delta^*$ by approximately the same factor: the cutoff scales with $\rho_s$ at leading order. By contrast, varying $v_{c_0}$ from 2 to 10 (a fivefold range covering all empirically defensible VSL calibrations) changes $\delta^*$ by less than $15\%$: the VSL anchor enters $W_0$ and $W_{AI}$ approximately symmetrically and largely cancels in the ratio.
 
-\paragraph{Methodological positioning.} The framework is a structured cost-benefit calculation. The output is a parametric cutoff, not a recommendation. Three things the framework does well: (a) it makes the structural sensitivities transparent, including the dominant role of the mortality channel that informal "growth versus extinction" framings obscure; (b) it identifies which empirical disagreements (about $\rho_s$, $m_{AI}$) translate to large cutoff differences and which (about $v_{c_0}$, $g_{AI}$) do not; (c) it provides a benchmark against which empirical estimates of $\delta$ can be assessed. Three things the framework does not do: (a) estimate the actual extinction hazard from any specific technology; (b) account for learning about $\delta$ over time, which under irreversibility would lower the effective adoption threshold below the static $\delta^*$ here; (c) account for growth-and-hazard complementarities \citep{jones2024recipe}.
+\paragraph{Methodological positioning.} The framework is a structured cost-benefit calculation. The output is a parametric cutoff, not a recommendation. Three things the framework does well: (a) it makes the structural sensitivities transparent, including the dominant role of the mortality channel that informal "growth versus extinction" framings obscure; (b) it identifies which empirical disagreements (about $\rho_s$, $m_{AI}$) translate to large cutoff differences and which (about $v_{c_0}$, $g_{AI}$) do not; (c) it provides a benchmark against which empirical estimates of $\delta$ can be assessed. Three things the framework does not do: (a) estimate the actual extinction hazard from any specific technology; (b) account for learning about $\delta$ over time, which under irreversibility would lower the effective adoption threshold below the static $\delta^*$ here; (c) account for growth-and-hazard complementarities \citep{jones2024aidilemma}.
 
 \paragraph{Plan.} Section~\ref{sec:lit} positions the paper. Section~\ref{sec:model} sets out the model and the VSL calibration. Section~\ref{sec:cutoff} derives the cutoff and the decomposition that delivers the main finding. Section~\ref{sec:results} presents the quantitative results. Section~\ref{sec:discussion} discusses what the framework can and cannot say. Section~\ref{sec:conclusion} concludes.
 
@@ -62,17 +62,19 @@ The model is a standard representative-agent CRRA economy with individual mortal
 \section{Related literature}
 \label{sec:lit}
 
-\paragraph{Existential-risk economics.} \citet{aschenbrenner2020existential} and \citet{trammell2020existential} embed extinction hazards in endogenous-growth frameworks. \citet{jones2024recipe} introduces growth-risk complementarity (the technology that drives growth may itself raise hazard). The present paper is closer to the static / partial-equilibrium cost-benefit tradition and abstracts from the complementarity; we return to this caveat in Section~\ref{sec:discussion}.
+\paragraph{Existential-risk economics.} \citet{aschenbrenner2020existential} and \citet{trammell2020existential} embed extinction hazards in endogenous-growth frameworks. \citet{jones2024aidilemma} introduces growth-risk complementarity (the technology that drives growth may itself raise hazard). The present paper is closer to the static / partial-equilibrium cost-benefit tradition and abstracts from the complementarity; we return to this caveat in Section~\ref{sec:discussion}.
 
-\paragraph{Value of statistical life.} \citet{viscusi2018pricing} and \citet{viscusi2003vsl} summarise the empirical VSL literature. UK and US estimates anchor the calibration: VSL $\approx$ \pounds 8.59m and \$10m respectively, normalised by remaining life expectancy and per-capita consumption to give $v_{c_0} \in [6, 8.3]$.
+\paragraph{Value of statistical life.} \citet{viscusi2018pricing} and \citet{viscusi2003vsl} summarise the empirical VSL literature. UK and US estimates anchor the calibration: VSL $\approx$ \pounds 8.59m and \$10m respectively, normalised by remaining life expectancy and per-capita consumption to give $v_{c_0} \in [6, 8.3]$. The additive flow benefit $\bar u$ through which VSL enters the utility function is the value-of-a-life-year object studied by \citet{rosen1988value}, \citet{murphy2006value}, and \citet{hall2007value}; the last, in particular, derives an additive value-of-life term from standard preferences and is the closest antecedent to our $\bar u$.
 
-\paragraph{Social discounting.} The debate over $\rho_s$ runs from \citet{stern2007economics} (near-zero $\rho_s$ on intergenerational-equity grounds) through \citet{nordhaus2007review,nordhaus2017evolution} (positive $\rho_s$ calibrated to market rates) to \citet{weitzman1998gamma,weitzman2007review} (parameter uncertainty implies effective discounting at the lowest-plausible rate). We do not take a position on $\rho_s$; we present results across a range and identify the cutoff's dependence on it as a key structural sensitivity.
+\paragraph{Social discounting.} The debate over $\rho_s$ has its origin in \citet{ramsey1928mathematical} and runs from \citet{stern2007economics} (near-zero $\rho_s$ on intergenerational-equity grounds) through \citet{nordhaus2007review,nordhaus2017evolution} (positive $\rho_s$ calibrated to market rates) to \citet{weitzman1998gamma,weitzman2007review} (parameter uncertainty implies effective discounting at the lowest-plausible rate). We do not take a position on $\rho_s$; we present results across a range and identify the cutoff's dependence on it as a key structural sensitivity.
 
-\paragraph{Catastrophic-risk policy.} \citet{posner2004catastrophe} and \citet{nordhaus2011economics} frame the broader policy-design question. The present paper sits within this tradition but focuses narrowly on the structural decomposition of $\delta^*$.
+\paragraph{Catastrophic-risk policy.} \citet{posner2004catastrophe} and \citet{nordhaus2011economics} frame the broader policy-design question, and \citet{weitzman2009modeling} and \citet{martin2015averting} analyse the cost-benefit treatment of low-probability, high-magnitude catastrophes of the kind studied here. The present paper sits within this tradition but focuses narrowly on the structural decomposition of $\delta^*$.
 
 %% ============================================================
 \section{Model}
 \label{sec:model}
+
+\paragraph{What carries the result.} The conclusion rides on a small set of world inputs: the VSL anchor (which calibrates the value-of-life constant $\bar u$ below), the scenario parameters (growth $g$, mortality $m$, and the extinction hazard $\delta$), and the social discount rate $\rho_s$. The functional choices around them are structural, not substantive: the CRRA-plus-additive-flow-benefit form (the additive $\bar u$ is the device that lets VSL enter utility, not a claim about its shape), the cohort-integral social-welfare aggregation, and the closed-form discount factors $D_1$--$D_4$. The mortality-channel dominance of \cref{prop:dominance} is accordingly a statement about those world inputs --- the size of $\bar u$ relative to consumption utility and the smallness of $\rho_s$ --- not an artefact of the functional form.
 
 \subsection{Preferences and value of life}
 \label{sec:utility}
@@ -122,10 +124,10 @@ W(g, m) \;=\; \int_0^\infty e^{-\rho_s t}\, U_t(g, m)\, dt
 \end{equation}
 where we define the four discount factors:
 \begin{equation}
-D_1(g,m) \equiv (\rho+m) + (\gamma-1)g, \quad
-D_2(g)   \equiv \rho_s + (\gamma-1)g, \quad
-D_3(m)   \equiv \rho + m, \quad
-D_4      \equiv \rho_s.
+\begin{aligned}
+D_1(g,m) &\equiv (\rho+m) + (\gamma-1)g, & \quad D_2(g) &\equiv \rho_s + (\gamma-1)g, \\
+D_3(m) &\equiv \rho + m, & \quad D_4 &\equiv \rho_s.
+\end{aligned}
 \label{eq:Ds}
 \end{equation}
 $D_1$ is the cohort discount rate for consumption-utility; $D_2$ is the social discount rate adjusted for cross-cohort consumption growth; $D_3$ and $D_4$ are the analogous factors for the constant flow-utility term.
@@ -293,7 +295,7 @@ The first and third are plausible; the second is empirically defensible (better 
 
 \emph{Learning and irreversibility.} The framework treats $\delta$ as known. Under uncertainty about $\delta$ and irreversibility of extinction, the option value of delaying adoption to gather information is positive. The framework does not capture this; a real-options extension would lower the effective adoption threshold below the static $\delta^*$.
 
-\emph{Growth-and-hazard complementarity.} \citet{jones2024recipe} argues that the technological capability that delivers growth may itself raise the hazard. Under this complementarity, $g_{AI}$ and $\delta$ are not independent and the cutoff calculation is not separable in the way \eqref{eq:decomp} suggests. The strength of the complementarity is empirically unknown.
+\emph{Growth-and-hazard complementarity.} \citet{jones2024aidilemma} argues that the technological capability that delivers growth may itself raise the hazard. Under this complementarity, $g_{AI}$ and $\delta$ are not independent and the cutoff calculation is not separable in the way \eqref{eq:decomp} suggests. The strength of the complementarity is empirically unknown.
 
 \paragraph{Methodological positioning.} The framework belongs to the structured-cost-benefit tradition. It does not estimate the actual extinction hazard from any specific technology. Its value is in clarifying which empirical disagreements drive the cutoff (mortality assumptions, social discounting) and which do not (VSL anchor, growth rate at standard parameters). Reasonable policymakers and analysts who disagree about extinction hazard can use the framework to identify which underlying parameter disagreement is driving the policy disagreement.
 

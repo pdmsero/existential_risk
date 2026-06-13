@@ -55,3 +55,15 @@ paper/*.toc
 # Claude Code orphan worktrees
 .claude/worktrees/
 
+
+# Canonical paper output lives in paper/build/ — ignore stray root-level builds
+/paper/main.pdf
+/paper/main.aux
+/paper/main.log
+/paper/main.out
+/paper/main.bbl
+/paper/main.blg
+/paper/main.spl
+/paper/main.fls
+/paper/main.fdb_latexmk
+/paper/main.toc
