@@ -1,10 +1,10 @@
 %% Mortality, Growth, and the Existential-Risk Cutoff.
 %% Pedro Ser\^odio.
 %%
-%% Rewritten after correcting the companion-code utility-form inconsistency
-%% and the cutoff-computation bug (the earlier code returned a relative
+%% Rewritten after correcting the utility-form inconsistency
+%% and the cutoff-computation bug (an earlier version reported a relative
 %% welfare gain, not the actual root delta* of W_AI(delta) = W_0). The
-%% corrected code performs proper root-finding via brentq.
+%% corrected version performs proper root-finding.
 %%
 %% The substantive shift: under the standard CRRA + VSL calibration, the
 %% welfare gain that determines the cutoff comes ~94\% from the mortality
@@ -148,7 +148,7 @@ where $D_2'(g, \delta) \equiv (\rho_s + \delta) + (\gamma-1)g$.
 The cutoff $\delta^*$ is the value of $\delta$ at which $W_{AI}(\delta^*) = W_0$, where $W_0 \equiv W(g_0, m_0)$. For $\delta < \delta^*$, $W_{AI}(\delta) > W_0$ (transformative scenario welfare-superior); for $\delta > \delta^*$, $W_{AI}(\delta) < W_0$.
 \end{definition}
 
-The cutoff has no useful closed form (it is the root of a rational function of $\delta$) and is computed by numerical root-finding (\texttt{scipy.optimize.brentq}) in the companion code \texttt{code/existentialrisk.py}.
+The cutoff has no useful closed form (it is the root of a rational function of $\delta$) and is computed by numerical root-finding.
 
 \subsection{Welfare-gain decomposition}
 \label{sec:decomp}
@@ -171,7 +171,7 @@ At the standard calibration ($\gamma = 2$, $\rho = \rho_s = 1\%$, $v_{c_0} = 6$,
 \end{proposition}
 
 \begin{proof}
-Direct computation from \eqref{eq:decomp} with the given parameters. Consumption-channel value: $754.28$. Flow-utility-channel value: $11{,}666.67$. Ratio: $11667/(11667+754) = 0.939$. Verified in the companion code's \texttt{welfare\_decomposition} function.
+Direct computation from \eqref{eq:decomp} with the given parameters. Consumption-channel value: $754.28$. Flow-utility-channel value: $11{,}666.67$. Ratio: $11667/(11667+754) = 0.939$. Verified by direct computation.
 \end{proof}
 
 \paragraph{Implication for the cutoff} The cutoff $\delta^*$ inherits the channel dominance. Because the welfare gain that $\delta^*$ trades against is overwhelmingly flow-utility-driven, the cutoff is essentially the answer to "how much extinction-hazard can the mortality-improvement-driven welfare gain absorb before the comparison flips?" Faster growth contributes a small additional welfare gain that allows a slightly higher cutoff, but the structural answer is determined by mortality, not by growth.
@@ -217,7 +217,7 @@ $g_{AI}$ & $m_{AI}$ & $\gamma$ & $\delta^*$ (\%/yr) & Flow-channel share & $u_\t
 20\% & 0.5\%  & 3 & 0.190 & 0.99 & 6.5 \\
 \bottomrule
 \end{tabular}
-\caption{Existential-risk cutoffs $\delta^*$ (\% per year) across scenarios. ``Flow-channel share'' is the share of $W_{AI}(0) - W_0$ contributed by the flow-utility (mortality) channel. At $\gamma \geq 2$ with mortality improvement, this share is $\geq 0.94$: mortality dominates the cutoff. Without mortality improvement, the cutoff at $\gamma \geq 2$ falls to near zero regardless of growth. Numbers from \texttt{code/existentialrisk.py}.}
+\caption{Existential-risk cutoffs $\delta^*$ (\% per year) across scenarios. ``Flow-channel share'' is the share of $W_{AI}(0) - W_0$ contributed by the flow-utility (mortality) channel. At $\gamma \geq 2$ with mortality improvement, this share is $\geq 0.94$: mortality dominates the cutoff. Without mortality improvement, the cutoff at $\gamma \geq 2$ falls to near zero regardless of growth.}
 \label{tab:cutoffs}
 \end{table}
 
