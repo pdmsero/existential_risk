@@ -9,7 +9,7 @@
 %% The substantive shift: under the standard CRRA + VSL calibration, the
 %% welfare gain that determines the cutoff comes ~94\% from the mortality
 %% channel (life-years preserved) and ~6\% from the growth channel
-%% (consumption gains). The "growth versus extinction" framing of the
+%% (consumption gains). The ``growth versus extinction'' framing of the
 %% earlier draft was misleading: at standard parameters, growth contributes
 %% almost nothing to the cutoff. What does the work is mortality reduction.
 
@@ -25,7 +25,21 @@
 \address[cbp]{Centre for British Progress, London}
 
 \begin{abstract}
-We characterise the maximum extinction hazard $\delta^*$ at which a transformative-technology scenario delivers higher social welfare than a status-quo baseline. The framework is a standard CRRA representative-agent economy with three primitives: a growth rate $g$, an individual mortality rate $m$, and a per-period flow utility calibrated against empirical Value of Statistical Life (VSL) data. We solve for $\delta^*$ by numerical root-finding on the welfare-equality condition $W_{AI}(\delta^*) = W_0$. The main finding: under the standard calibration ($\gamma = 2$, $\rho = \rho_s = 1\%$, $v_{c_0} = 6$), the welfare gain that determines the cutoff comes overwhelmingly from the mortality channel (approximately 94\%), with the consumption-growth channel contributing the remaining 6\%. At the headline parameters ($g_{AI} = 10\%$, $m_{AI} = 0.5\%$, mortality halved from baseline), $\delta^* \approx 0.20\%$ per year. Without mortality improvement ($m_{AI} = m_0$), the cutoff collapses to approximately $0.015\%$ at $\gamma = 2$: growth alone does not buy meaningful extinction-hazard tolerance. The cutoff is highly sensitive to the social discount rate ($\delta^*$ falls by approximately the same factor as $\rho_s$) and weakly sensitive to the VSL anchor $v_{c_0}$ (the anchor scales both $W_0$ and $W_{AI}$, leaving the ratio approximately invariant). The framework is a structured cost-benefit calculation, not a recommendation about any specific technology. Its policy use is to clarify which empirical disagreements (mortality assumptions, discount-rate choice) drive the cutoff and which (growth-rate assumptions) do not.
+We characterise the maximum extinction hazard at which a transformative-technology scenario
+delivers higher social welfare than a status-quo baseline. The framework is a standard CRRA
+representative-agent economy with three primitives: a growth rate, an individual mortality
+rate, and a per-period flow utility calibrated against empirical value-of-statistical-life
+data. We solve for the hazard cutoff by numerical root-finding on the welfare-equality
+condition. The main finding is that, under the standard calibration, the welfare gain
+determining the cutoff comes overwhelmingly from the mortality channel (about ninety-four
+percent), with consumption growth contributing the rest. At the headline parameters, with the
+mortality rate halved from baseline, the cutoff is roughly a fifth of a percent per year;
+without any mortality improvement it collapses by more than an order of magnitude, so growth
+alone buys little extinction-hazard tolerance. The cutoff is highly sensitive to the social
+discount rate and weakly sensitive to the value-of-statistical-life anchor. The framework is
+a structured cost-benefit calculation, not a recommendation about any specific technology;
+its use is to clarify which empirical disagreements (mortality assumptions, discount-rate
+choice) drive the cutoff and which (growth-rate assumptions) do not.
 \end{abstract}
 
 \begin{keyword}
@@ -42,7 +56,7 @@ mortality reduction \sep transformative AI
 
 The economics of existential risk asks how to value the avoidance of low-probability, high-magnitude extinction outcomes within a welfare-economic framework. \citet{aschenbrenner2020existential} and \citet{trammell2020existential} provide the foundational analyses; \citet{jones2024aidilemma} extends the framework to growth-risk complementarities; the broader cost-benefit-of-catastrophic-risk tradition is summarised by \citet{posner2004catastrophe} and \citet{nordhaus2011economics}. The central methodological question is how the various channels (growth gains, mortality reduction, extinction probability, social discounting) combine to determine a policy-relevant threshold.
 
-This paper provides a structured cost-benefit calculation of the threshold and asks a sharper question of it: \emph{which channel does the work}? Under what circumstances is the cutoff $\delta^*$ at which a transformative-technology scenario equals the status-quo baseline in welfare driven by faster growth, and under what circumstances is it driven by mortality reduction, or by social discounting choices? The structural decomposition delivers a clean answer that is at odds with the intuitive "growth versus extinction" framing.
+This paper provides a structured cost-benefit calculation of the threshold and asks a sharper question of it: \emph{which channel does the work}? Under what circumstances is the cutoff $\delta^*$ at which a transformative-technology scenario equals the status-quo baseline in welfare driven by faster growth, and under what circumstances is it driven by mortality reduction, or by social discounting choices? The structural decomposition delivers a clean answer that is at odds with the intuitive ``growth versus extinction'' framing.
 
 The model is a standard representative-agent CRRA economy with individual mortality rate $m$, growth rate $g$, social discount rate $\rho_s$, and a per-period flow utility $\bar u$ calibrated to empirical VSL data. We compare a baseline at $(g_0, m_0) = (2\%, 1\%)$ to a transformative-technology scenario at $(g_{AI}, m_{AI})$. The extinction hazard $\delta$ enters as an additional Poisson rate that augments both the individual mortality rate (each cohort discounts by $\rho + m + \delta$) and the social discount rate (future cohorts discount by $\rho_s + \delta$). The cutoff $\delta^*$ is the value at which $W_{AI}(\delta^*) = W_0$, solved by numerical root-finding.
 
@@ -54,7 +68,7 @@ The model is a standard representative-agent CRRA economy with individual mortal
 
 \emph{(iii) The cutoff is structural in $\rho_s$, not in $v_{c_0}$.} A tenfold reduction in $\rho_s$ (from $1\%$ to $0.1\%$) reduces $\delta^*$ by approximately the same factor: the cutoff scales with $\rho_s$ at leading order. By contrast, varying $v_{c_0}$ from 2 to 10 (a fivefold range covering all empirically defensible VSL calibrations) changes $\delta^*$ by less than $15\%$: the VSL anchor enters $W_0$ and $W_{AI}$ approximately symmetrically and largely cancels in the ratio.
 
-\paragraph{Methodological positioning} The framework is a structured cost-benefit calculation. The output is a parametric cutoff, not a recommendation. Three things the framework does well: (a) it makes the structural sensitivities transparent, including the dominant role of the mortality channel that informal "growth versus extinction" framings obscure; (b) it identifies which empirical disagreements (about $\rho_s$, $m_{AI}$) translate to large cutoff differences and which (about $v_{c_0}$, $g_{AI}$) do not; (c) it provides a benchmark against which empirical estimates of $\delta$ can be assessed. Three things the framework does not do: (a) estimate the actual extinction hazard from any specific technology; (b) account for learning about $\delta$ over time, which under irreversibility would lower the effective adoption threshold below the static $\delta^*$ here; (c) account for growth-and-hazard complementarities \citep{jones2024aidilemma}.
+\paragraph{Methodological positioning} The framework is a structured cost-benefit calculation. The output is a parametric cutoff, not a recommendation. Three things the framework does well: (a) it makes the structural sensitivities transparent, including the dominant role of the mortality channel that informal ``growth versus extinction'' framings obscure; (b) it identifies which empirical disagreements (about $\rho_s$, $m_{AI}$) translate to large cutoff differences and which (about $v_{c_0}$, $g_{AI}$) do not; (c) it provides a benchmark against which empirical estimates of $\delta$ can be assessed. Three things the framework does not do: (a) estimate the actual extinction hazard from any specific technology; (b) account for learning about $\delta$ over time, which under irreversibility would lower the effective adoption threshold below the static $\delta^*$ here; (c) account for growth-and-hazard complementarities \citep{jones2024aidilemma}.
 
 \paragraph{Plan} Section~\ref{sec:lit} positions the paper. Section~\ref{sec:model} sets out the model and the VSL calibration. Section~\ref{sec:cutoff} derives the cutoff and the decomposition that delivers the main finding. Section~\ref{sec:results} presents the quantitative results. Section~\ref{sec:discussion} discusses what the framework can and cannot say. Section~\ref{sec:conclusion} concludes.
 
@@ -74,7 +88,7 @@ The model is a standard representative-agent CRRA economy with individual mortal
 \section{Model}
 \label{sec:model}
 
-\paragraph{What carries the result} The conclusion rides on a small set of world inputs: the VSL anchor (which calibrates the value-of-life constant $\bar u$ below), the scenario parameters (growth $g$, mortality $m$, and the extinction hazard $\delta$), and the social discount rate $\rho_s$. The functional choices around them are structural, not substantive: the CRRA-plus-additive-flow-benefit form (the additive $\bar u$ is the device that lets VSL enter utility, not a claim about its shape), the cohort-integral social-welfare aggregation, and the closed-form discount factors $D_1$--$D_4$. The mortality-channel dominance of \cref{prop:dominance} is accordingly a statement about those world inputs --- the size of $\bar u$ relative to consumption utility and the smallness of $\rho_s$ --- not an artefact of the functional form.
+\paragraph{What carries the result} The conclusion rides on a small set of world inputs: the VSL anchor (which calibrates the value-of-life constant $\bar u$ below), the scenario parameters (growth $g$, mortality $m$, and the extinction hazard $\delta$), and the social discount rate $\rho_s$. The functional choices around them are structural, not substantive: the CRRA-plus-additive-flow-benefit form (the additive $\bar u$ is the device that lets VSL enter utility, not a claim about its shape), the cohort-integral social-welfare aggregation, and the closed-form discount factors $D_1$--$D_4$. The mortality-channel dominance of \cref{prop:dominance} is accordingly a statement about those world inputs, the size of $\bar u$ relative to consumption utility and the smallness of $\rho_s$, not an artefact of the functional form.
 
 \subsection{Preferences and value of life}
 \label{sec:utility}
@@ -174,9 +188,9 @@ At the standard calibration ($\gamma = 2$, $\rho = \rho_s = 1\%$, $v_{c_0} = 6$,
 Direct computation from \eqref{eq:decomp} with the given parameters. Consumption-channel value: $754.28$. Flow-utility-channel value: $11{,}666.67$. Ratio: $11667/(11667+754) = 0.939$. Verified by direct computation.
 \end{proof}
 
-\paragraph{Implication for the cutoff} The cutoff $\delta^*$ inherits the channel dominance. Because the welfare gain that $\delta^*$ trades against is overwhelmingly flow-utility-driven, the cutoff is essentially the answer to "how much extinction-hazard can the mortality-improvement-driven welfare gain absorb before the comparison flips?" Faster growth contributes a small additional welfare gain that allows a slightly higher cutoff, but the structural answer is determined by mortality, not by growth.
+\paragraph{Implication for the cutoff} The cutoff $\delta^*$ inherits the channel dominance. Because the welfare gain that $\delta^*$ trades against is overwhelmingly flow-utility-driven, the cutoff is essentially the answer to ``how much extinction-hazard can the mortality-improvement-driven welfare gain absorb before the comparison flips?'' Faster growth contributes a small additional welfare gain that allows a slightly higher cutoff, but the structural answer is determined by mortality, not by growth.
 
-This is the substantive finding of the paper and it is at odds with the intuitive "growth versus extinction" framing.
+This is the substantive finding of the paper and it is at odds with the intuitive ``growth versus extinction'' framing.
 
 %% ============================================================
 \section{Quantitative results}
@@ -279,7 +293,7 @@ $v_{c_0}$ & $\bar u$ & $\delta^*$ (\%/yr) & Flow-channel share \\
 \section{Discussion}
 \label{sec:discussion}
 
-\paragraph{The framework's central finding} At standard macro calibrations ($\gamma \geq 2$), the existential-risk cutoff is overwhelmingly determined by the mortality channel. Growth contributes secondarily; without mortality improvement, growth alone does not buy meaningful extinction-hazard tolerance. The informal "growth versus extinction" framing common in popular discussions of transformative-AI policy is misleading: the relevant trade-off is "mortality reduction versus extinction," with growth as a minor modifier.
+\paragraph{The framework's central finding} At standard macro calibrations ($\gamma \geq 2$), the existential-risk cutoff is overwhelmingly determined by the mortality channel. Growth contributes secondarily; without mortality improvement, growth alone does not buy meaningful extinction-hazard tolerance. The informal ``growth versus extinction'' framing common in popular discussions of transformative-AI policy is misleading: the relevant trade-off is ``mortality reduction versus extinction'', with growth as a minor modifier.
 
 This is a substantive finding about what the model says, not a recommendation. Two readings are possible.
 
@@ -307,7 +321,7 @@ A standard CRRA representative-agent framework augmented by mortality and VSL ca
 
 The headline finding is the decomposition: at standard calibrations, the mortality channel contributes approximately $94\%$ of the welfare gain that the cutoff trades against extinction-hazard, with the consumption-growth channel contributing the remaining $6\%$. The cutoff is therefore essentially a calculation of life-years preserved per unit hazard, not of consumption gained per unit hazard. Without mortality improvement, growth alone produces a near-zero cutoff at $\gamma \geq 2$. The cutoff is structural in the social discount rate (scaling proportionally with $\rho_s$) but weakly sensitive to the VSL anchor (which scales both sides of the comparison approximately symmetrically).
 
-The framework does not estimate the actual extinction hazard from any specific technology. It provides a structured benchmark in which the relative importance of mortality, growth, discounting, and VSL choices can be made transparent. The policy implication is that the relevant debate is not "growth versus extinction" but "mortality reduction and social discounting versus extinction," with the choice of $\rho_s$ identified as the dominant structural sensitivity.
+The framework does not estimate the actual extinction hazard from any specific technology. It provides a structured benchmark in which the relative importance of mortality, growth, discounting, and VSL choices can be made transparent. The policy implication is that the relevant debate is not ``growth versus extinction'' but ``mortality reduction and social discounting versus extinction'', with the choice of $\rho_s$ identified as the dominant structural sensitivity.
 
 %% ============================================================
 \bibliographystyle{_latex/elsarticle-harv}
